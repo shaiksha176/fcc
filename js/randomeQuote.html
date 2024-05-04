@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Random Quote Machine</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 100vh;
+        margin: 0;
+      }
+
+      #quote-box {
+        text-align: center;
+        background-color: #f8f9fa;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+
+      #text {
+        font-size: 1.5rem;
+        margin-bottom: 20px;
+      }
+
+      #author {
+        font-size: 1rem;
+        font-style: italic;
+        margin-bottom: 20px;
+      }
+
+      button {
+        background-color: #007bff;
+        color: #fff;
+        border: none;
+        border-radius: 3px;
+        padding: 10px 20px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: background-color 0.3s;
+      }
+
+      button:hover {
+        background-color: #0056b3;
+      }
+
+      #tweet-quote {
+        color: #007bff;
+        text-decoration: none;
+        transition: color 0.3s;
+      }
+
+      #tweet-quote:hover {
+        color: #0056b3;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="quote-box">
+      <p id="text"></p>
+      <p id="author"></p>
+      <button id="new-quote">New Quote</button>
+    </div>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const quoteText = document.getElementById("text");
+        const quoteAuthor = document.getElementById("author");
+        const newQuoteBtn = document.getElementById("new-quote");
+
+        // Function to fetch a random quote from an API
+        async function getQuote() {
+          try {
+            const response = await fetch("https://api.quotable.io/random");
+            const data = await response.json();
+            quoteText.textContent = data.content;
+            quoteAuthor.textContent = "- " + data.author;
+    
+          } catch (error) {
+            console.error("Error fetching quote:", error);
+          }
+        }
+
+        // Event listener for new quote button
+        newQuoteBtn.addEventListener("click", getQuote);
+
+        // Fetch a random quote on page load
+        getQuote();
+      });
+    </script>
+  </body>
+</html>

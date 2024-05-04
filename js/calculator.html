@@ -1,0 +1,171 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Calculator</title>
+    <style>
+      body {
+        height: 100vh;
+        width: 100%;
+        display: grid;
+        place-items: center;
+      }
+      .calculator {
+        max-width: 300px;
+        margin: 0 auto;
+        text-align: center;
+      }
+
+      .display {
+        background-color: #f0f0f0;
+        height: 100px;
+        line-height: 100px;
+        font-size: 2em;
+      }
+
+      button {
+        background-color: #4caf50;
+        color: white;
+        border: none;
+        padding: 20px;
+        font-size: 1.5em;
+        cursor: pointer;
+        width: 50px;
+        height: 50px;
+        margin: 5px;
+      }
+
+      button:hover {
+        background-color: #45a049;
+      }
+
+      button:active {
+        background-color: #3e8e41;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="calculator" class="calculator">
+      <div id="display" class="display">0</div>
+      <button id="clear" class="clear">AC</button>
+      <button id="divide" class="operator">/</button>
+      <button id="multiply" class="operator">*</button>
+      <button id="seven" class="number">7</button>
+      <button id="eight" class="number">8</button>
+      <button id="nine" class="number">9</button>
+      <button id="subtract" class="operator">-</button>
+      <button id="four" class="number">4</button>
+      <button id="five" class="number">5</button>
+      <button id="six" class="number">6</button>
+      <button id="add" class="operator">+</button>
+      <button id="one" class="number">1</button>
+      <button id="two" class="number">2</button>
+      <button id="three" class="number">3</button>
+      <button id="equals" class="equal">=</button>
+      <button id="zero" class="number">0</button>
+      <button id="decimal" class="decimal">.</button>
+    </div>
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const display = document.getElementById("display");
+        let currentOperand = "0";
+        let previousOperand = "";
+        let operator = "";
+
+        function updateDisplay() {
+          display.innerText = currentOperand;
+        }
+
+        function appendNumber(number) {
+          if (currentOperand === "0" || currentOperand === "Error") {
+            currentOperand = number.toString();
+          } else {
+            currentOperand += number.toString();
+          }
+          updateDisplay();
+        }
+
+        function appendDecimal() {
+          if (!currentOperand.includes(".")) {
+            currentOperand += ".";
+            updateDisplay();
+          }
+        }
+
+        function chooseOperator(op) {
+          if (currentOperand !== "Error") {
+            if (previousOperand !== "") {
+              calculate();
+            }
+            operator = op;
+            previousOperand = currentOperand;
+            currentOperand = "";
+          }
+        }
+
+        function calculate() {
+          let result;
+          const prev = parseFloat(previousOperand);
+          const current = parseFloat(currentOperand);
+          if (isNaN(prev) || isNaN(current)) {
+            currentOperand = "Error";
+            return;
+          }
+          switch (operator) {
+            case "+":
+              result = prev + current;
+              break;
+            case "-":
+              result = prev - current;
+              break;
+            case "*":
+              result = prev * current;
+              break;
+            case "/":
+              if (current === 0) {
+                currentOperand = "Error";
+                return;
+              }
+              result = prev / current;
+              break;
+            default:
+              return;
+          }
+          currentOperand = result.toString();
+          previousOperand = "";
+          operator = "";
+        }
+
+        function clear() {
+          currentOperand = "0";
+          previousOperand = "";
+          operator = "";
+          updateDisplay();
+        }
+
+        document.querySelectorAll(".number").forEach((button) => {
+          button.addEventListener("click", () => {
+            appendNumber(button.innerText);
+          });
+        });
+
+        document
+          .getElementById("decimal")
+          .addEventListener("click", appendDecimal);
+
+        document.querySelectorAll(".operator").forEach((button) => {
+          button.addEventListener("click", () => {
+            chooseOperator(button.innerText);
+          });
+        });
+
+        document.getElementById("equals").addEventListener("click", () => {
+          calculate();
+          updateDisplay();
+        });
+
+        document.getElementById("clear").addEventListener("click", clear);
+      });
+    </script>
+  </body>
+</html>

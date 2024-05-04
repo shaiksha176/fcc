@@ -1,0 +1,156 @@
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Timer</title>
+    <style>
+      body {
+        text-align: center;
+      }
+
+      button {
+        margin: 10px;
+        padding: 5px 10px;
+      }
+
+      #time-left {
+        font-size: 32px;
+      }
+    </style>
+  </head>
+  <body>
+    <div id="break-label">Break Length</div>
+    <div id="break-length">5</div>
+    <button id="break-decrement">-</button>
+    <button id="break-increment">+</button>
+
+    <div id="session-label">Session Length</div>
+    <div id="session-length">25</div>
+    <button id="session-decrement">-</button>
+    <button id="session-increment">+</button>
+
+    <div id="timer-label">Session</div>
+    <div id="time-left">25:00</div>
+    <button id="start_stop">Start/Pause</button>
+    <button id="reset">Reset</button>
+
+    <audio
+      id="beep"
+      src="https://actions.google.com/sounds/v1/alarms/beep_short.ogg"
+    ></audio>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        let breakLength = 5;
+        let sessionLength = 25;
+        let timeLeft = sessionLength * 60;
+        let timerRunning = false;
+        let intervalID;
+
+        const breakDecrementBtn = document.getElementById("break-decrement");
+        const breakIncrementBtn = document.getElementById("break-increment");
+        const sessionDecrementBtn =
+          document.getElementById("session-decrement");
+        const sessionIncrementBtn =
+          document.getElementById("session-increment");
+        const startStopBtn = document.getElementById("start_stop");
+        const resetBtn = document.getElementById("reset");
+        const breakLengthDisplay = document.getElementById("break-length");
+        const sessionLengthDisplay = document.getElementById("session-length");
+        const timerLabel = document.getElementById("timer-label");
+        const timeLeftDisplay = document.getElementById("time-left");
+        const beepSound = document.getElementById("beep");
+
+        // Event listeners for buttons
+        breakDecrementBtn.addEventListener("click", decrementBreakLength);
+        breakIncrementBtn.addEventListener("click", incrementBreakLength);
+        sessionDecrementBtn.addEventListener("click", decrementSessionLength);
+        sessionIncrementBtn.addEventListener("click", incrementSessionLength);
+        startStopBtn.addEventListener("click", startStopTimer);
+        resetBtn.addEventListener("click", resetTimer);
+
+        function decrementBreakLength() {
+          if (breakLength > 1) {
+            breakLength--;
+            breakLengthDisplay.textContent = breakLength;
+          }
+        }
+
+        function incrementBreakLength() {
+          if (breakLength < 60) {
+            breakLength++;
+            breakLengthDisplay.textContent = breakLength;
+          }
+        }
+
+        function decrementSessionLength() {
+          if (sessionLength > 1) {
+            sessionLength--;
+            sessionLengthDisplay.textContent = sessionLength;
+            if (!timerRunning) {
+              timeLeft = sessionLength * 60;
+              updateTimerDisplay();
+            }
+          }
+        }
+
+        function incrementSessionLength() {
+          if (sessionLength < 60) {
+            sessionLength++;
+            sessionLengthDisplay.textContent = sessionLength;
+            if (!timerRunning) {
+              timeLeft = sessionLength * 60;
+              updateTimerDisplay();
+            }
+          }
+        }
+
+        function startStopTimer() {
+          if (timerRunning) {
+            clearInterval(intervalID);
+            timerRunning = false;
+          } else {
+            intervalID = setInterval(updateTimer, 1000);
+            timerRunning = true;
+          }
+        }
+
+        function resetTimer() {
+          clearInterval(intervalID);
+          timerRunning = false;
+          breakLength = 5;
+          sessionLength = 25;
+          timeLeft = sessionLength * 60;
+          updateTimerDisplay();
+          timerLabel.textContent = "Session";
+          beepSound.pause();
+          beepSound.currentTime = 0;
+        }
+
+        function updateTimer() {
+          if (timeLeft === 0) {
+            beepSound.play();
+            if (timerLabel.textContent === "Session") {
+              timerLabel.textContent = "Break";
+              timeLeft = breakLength * 60;
+            } else {
+              timerLabel.textContent = "Session";
+              timeLeft = sessionLength * 60;
+            }
+          } else {
+            timeLeft--;
+          }
+          updateTimerDisplay();
+        }
+
+        function updateTimerDisplay() {
+          const minutes = Math.floor(timeLeft / 60);
+          const seconds = timeLeft % 60;
+          timeLeftDisplay.textContent = `${minutes < 10 ? "0" : ""}${minutes}:${
+            seconds < 10 ? "0" : ""
+          }${seconds}`;
+        }
+      });
+    </script>
+  </body>
+</html>

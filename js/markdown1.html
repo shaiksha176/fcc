@@ -1,0 +1,63 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown Previewer</title>
+    <style>
+      body {
+        font-family: sans-serif;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        width: 600px;
+        margin: 0 auto;
+        padding: 20px;
+      }
+
+      #editor,
+      #preview {
+        width: 100%;
+        padding: 10px;
+        border: 1px solid #ddd;
+        border-radius: 5px;
+        margin-bottom: 10px;
+        font-size: 16px;
+      }
+
+      #preview {
+        background-color: #eee;
+      }
+    </style>
+  </head>
+  <body>
+    <h1>Markdown Previewer</h1>
+    <div class="container">
+      <textarea id="editor" placeholder="Type your markdown here..."></textarea>
+      <div id="preview"></div>
+    </div>
+    <script>
+      const editor = document.getElementById("editor");
+      const preview = document.getElementById("preview");
+
+      const marked = require("marked");
+      // Default markdown content
+      const defaultMarkdown = `# Welcome to my Markdown Previewer!
+
+This is a heading (H1).
+
+## This is a subheading (H2).
+
+You can write [links](https://www.freecodecamp.org) like this.
+
+Use inline code like this: \`code\`
+
+Here's a code block:
+
+```;
+    </script>
+  </body>
+</html>

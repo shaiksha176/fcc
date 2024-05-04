@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Markdown Previewer</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+      }
+
+      .container {
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        margin-top: 20px;
+      }
+
+      textarea {
+        width: 70%;
+        height: 300px;
+      }
+
+      #preview {
+        width: 70%;
+        padding: 10px;
+        margin-top: 20px;
+        border: 1px solid #ccc;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <textarea id="editor" rows="10"></textarea>
+      <div id="preview"></div>
+    </div>
+    <script src="https://cdn.jsdelivr.net/npm/marked/marked.min.js"></script>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", function () {
+        const editor = document.getElementById("editor");
+        const preview = document.getElementById("preview");
+
+        // Default markdown content
+        const defaultMarkdown = `# Heading 1
+## Heading 2
+[Link](https://www.example.com)
+\`inline code\`
+
+\`\`\`
+// code block
+function greet(name) {
+  return 'Hello, ' + name + '!';
+}
+\`\`\`
+
+- List item 1
+- List item 2
+
+> Blockquote
+
+**Bold text**
+`;
+
+        // Render default markdown
+        editor.value = defaultMarkdown;
+        preview.innerHTML = marked(defaultMarkdown);
+
+        // Update preview on editor input
+        editor.addEventListener("input", function () {
+          const markdown = editor.value;
+          preview.innerHTML = marked(markdown);
+        });
+      });
+    </script>
+  </body>
+</html>
